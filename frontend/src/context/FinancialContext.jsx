@@ -81,7 +81,9 @@ export function FinancialProvider({ phone, children }) {
 
     const connectSSE = () => {
       try {
-        const streamUrl = `http://localhost:5000/api/events/stream?phone=${encodeURIComponent(phone)}`;
+        const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+        const streamBase = apiBase.replace(/\/api\/?$/, "");
+        const streamUrl = `${streamBase}/api/events/stream?phone=${encodeURIComponent(phone)}`;
         eventSource = new EventSource(streamUrl);
 
         eventSource.onopen = () => {
