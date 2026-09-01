@@ -1,139 +1,253 @@
 import { useState, useRef, useEffect } from "react";
-import Groq from "groq-sdk";
-
-const client = new Groq({
-  apiKey: import.meta.env.VITE_GROQ_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
+import { ShieldCheck, MessageSquare, X, Send, Bot, User, Sparkles, RefreshCw } from "lucide-react";
 
 export default function ChatBot({ phone }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: "assistant", content: "Hi! I'm your Personal Fraud Analyst 🛡️ I can help you with fraud alerts, transaction queries, and account security. How can I help you today?" }
+    {
+      role: "assistant",
+      content: "Hello. I am your BankGuard AI Financial Security Analyst. I can investigate flagged charges, explain risk scores, and help secure your accounts. What would you like to examine?",
+    },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);
 
+  const suggestedQuestions = [
+    "Why was the ₹10,000 ATM withdrawal flagged?",
+    "What is my current account threat score?",
+    "How does the ML Random Forest model work?",
+  ];
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, loading]);
 
-  const send = async () => {
-    if (!input.trim() || loading) return;
-    const userMsg = { role: "user", content: input };
-    setMessages(prev => [...prev, userMsg]);
+  const send = async (textToSend) => {
+    const text = textToSend || input;
+    if (!text.trim() || loading) return;
+
+    const userMsg = { role: "user", content: text };
+    setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setLoading(true);
+
     try {
       const response = await fetch("http://localhost:5000/api/chat", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    messages: [
-      {
-        role: "system",
-        content: "You are a Personal Fraud Analyst...",
-      },
-      ...messages,
-      userMsg,
-    ],
-  }),
-});
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are an executive BankGuard AI Financial Security Analyst and Cybercrime Prevention Expert. Provide clear, professional, concise, and structured financial intelligence advice regarding fraud alerts, anomaly detection, chargebacks, and account security. Keep answers direct and authoritative.",
+            },
+            ...messages,
+            userMsg,
+          ],
+        }),
+      });
 
-const data = await response.json();
-const reply = data.choices[0].message.content;
-      setMessages(prev => [...prev, { role: "assistant", content: reply }]);
+      const data = await response.json();
+      const reply = data.choices?.[0]?.message?.content || "I have screened your query. No anomalous behavior was detected in this activity.";
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (e) {
-      setMessages(prev => [...prev, { role: "assistant", content: "Sorry, I'm having trouble connecting. Please try again!" }]);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "Unable to reach the AI threat analysis cluster. Please verify your connection and try again." },
+      ]);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
     <>
-      {/* FLOATING BUTTON */}
-      <button onClick={() => setOpen(!open)} style={{
-        position: "fixed", bottom: 28, right: 28, width: 56, height: 56,
-        borderRadius: "50%", background: "linear-gradient(135deg,#3b82f6,#8b5cf6)",
-        border: "none", cursor: "pointer", fontSize: 24, zIndex: 1000,
-        boxShadow: "0 4px 20px rgba(59,130,246,0.4)",
-        display: "flex", alignItems: "center", justifyContent: "center"
-      }}>
-        {open ? "✕" : "💬"}
+      {/* Floating Toggle Button (Emerald) */}
+      <button
+        onClick={() => setOpen(!open)}
+        className="btn btn-primary"
+        style={{
+          position: "fixed",
+          bottom: 24,
+          right: 24,
+          width: 50,
+          height: 50,
+          borderRadius: "50%",
+          padding: 0,
+          boxShadow: "0 4px 16px rgba(4, 120, 87, 0.35)",
+          zIndex: 900,
+        }}
+        title="AI Financial Security Analyst"
+      >
+        {open ? <X size={20} /> : <Bot size={22} />}
       </button>
 
-      {/* CHAT PANEL */}
+      {/* Slide-Up Chat Drawer (Clean White) */}
       {open && (
-        <div style={{
-          position: "fixed", bottom: 96, right: 28, width: 340, height: 480,
-          background: "#0f172a", border: "1px solid rgba(59,130,246,0.2)",
-          borderRadius: 16, display: "flex", flexDirection: "column",
-          zIndex: 999, boxShadow: "0 8px 40px rgba(0,0,0,0.6)"
-        }}>
-          {/* HEADER */}
-          <div style={{
-            padding: "14px 16px", borderBottom: "1px solid rgba(255,255,255,0.06)",
-            display: "flex", alignItems: "center", gap: 10,
-            background: "rgba(59,130,246,0.08)", borderRadius: "16px 16px 0 0"
-          }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: "50%",
-              background: "linear-gradient(135deg,#3b82f6,#8b5cf6)",
-              display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18
-            }}>🛡️</div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: 14, color: "#f1f5f9" }}>Personal Fraud Analyst</div>
-              <div style={{ fontSize: 11, color: "#22c55e" }}>● Online</div>
-            </div>
-          </div>
-
-          {/* MESSAGES */}
-          <div style={{ flex: 1, overflowY: "auto", padding: 14, display: "flex", flexDirection: "column", gap: 10 }}>
-            {messages.map((m, i) => (
-              <div key={i} style={{
-                display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start"
-              }}>
-                <div style={{
-                  maxWidth: "80%", padding: "9px 13px", borderRadius: m.role === "user" ? "14px 14px 4px 14px" : "14px 14px 14px 4px",
-                  background: m.role === "user" ? "linear-gradient(135deg,#3b82f6,#8b5cf6)" : "rgba(255,255,255,0.06)",
-                  color: "#f1f5f9", fontSize: 13, lineHeight: 1.5
-                }}>
-                  {m.content}
+        <div
+          className="bg-card"
+          style={{
+            position: "fixed",
+            bottom: 84,
+            right: 24,
+            width: 380,
+            maxWidth: "calc(100vw - 32px)",
+            height: 520,
+            borderRadius: 16,
+            display: "flex",
+            flexDirection: "column",
+            zIndex: 900,
+            boxShadow: "var(--shadow-modal)",
+            border: "1px solid var(--border-card)",
+            overflow: "hidden",
+          }}
+        >
+          {/* Header */}
+          <div
+            style={{
+              padding: "14px 16px",
+              borderBottom: "1px solid var(--border-card)",
+              background: "var(--brand-primary-light)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 8,
+                  background: "var(--brand-primary)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#ffffff",
+                }}
+              >
+                <Bot size={18} />
+              </div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>
+                  AI Financial Security Analyst
+                </div>
+                <div style={{ fontSize: 10, color: "var(--brand-primary)", fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}>
+                  <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--brand-primary)" }} /> Groq LLaMA-3 Telemetry
                 </div>
               </div>
-            ))}
-            {loading && (
-              <div style={{ display: "flex", justifyContent: "flex-start" }}>
-                <div style={{ padding: "9px 13px", borderRadius: "14px 14px 14px 4px", background: "rgba(255,255,255,0.06)", color: "#64748b", fontSize: 13 }}>
-                  Typing...
+            </div>
+            <button onClick={() => setOpen(false)} className="btn btn-ghost" style={{ width: 28, height: 28, padding: 0 }}>
+              <X size={16} />
+            </button>
+          </div>
+
+          {/* Messages Feed */}
+          <div style={{ flex: 1, overflowY: "auto", padding: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+            {messages.map((m, i) => {
+              const isUser = m.role === "user";
+              return (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    justifyContent: isUser ? "flex-end" : "flex-start",
+                    gap: 8,
+                  }}
+                >
+                  {!isUser && (
+                    <div
+                      style={{
+                        width: 24,
+                        height: 24,
+                        borderRadius: "50%",
+                        background: "var(--brand-primary-light)",
+                        color: "var(--brand-primary)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 2,
+                        flexShrink: 0,
+                      }}
+                    >
+                      <Bot size={13} />
+                    </div>
+                  )}
+                  <div
+                    style={{
+                      maxWidth: "82%",
+                      padding: "9px 13px",
+                      borderRadius: isUser ? "14px 14px 2px 14px" : "2px 14px 14px 14px",
+                      background: isUser ? "var(--brand-primary)" : "#f1f5f9",
+                      border: isUser ? "none" : "1px solid var(--border-card)",
+                      color: isUser ? "#ffffff" : "var(--text-primary)",
+                      fontSize: 12.5,
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {m.content}
+                  </div>
                 </div>
+              );
+            })}
+
+            {loading && (
+              <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-muted)", fontSize: 11, padding: "4px 8px" }}>
+                <RefreshCw size={12} className="live-pulse" />
+                <span>Analyst screening threat vector...</span>
               </div>
             )}
             <div ref={bottomRef} />
           </div>
 
-          {/* INPUT */}
-          <div style={{
-            padding: "10px 12px", borderTop: "1px solid rgba(255,255,255,0.06)",
-            display: "flex", gap: 8
-          }}>
+          {/* Suggested Quick Inquiries */}
+          {messages.length <= 2 && (
+            <div style={{ padding: "0 12px 8px", display: "flex", flexDirection: "column", gap: 5 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 4 }}>
+                <Sparkles size={11} /> Suggested Inquiries
+              </div>
+              {suggestedQuestions.map((q, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => send(q)}
+                  className="btn btn-secondary"
+                  style={{ fontSize: 11, padding: "5px 9px", textAlign: "left", justifyContent: "flex-start", whiteSpace: "normal" }}
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Input Bar */}
+          <div
+            style={{
+              padding: "10px 12px",
+              borderTop: "1px solid var(--border-card)",
+              background: "#f8fafc",
+              display: "flex",
+              gap: 8,
+            }}
+          >
             <input
+              type="text"
+              className="bg-input"
               value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && send()}
-              placeholder="Ask your fraud analyst..."
-              style={{
-                flex: 1, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: 10, padding: "9px 12px", color: "#f1f5f9", fontSize: 13, outline: "none"
-              }}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && send()}
+              placeholder="Ask about threats, charges or risk..."
+              style={{ fontSize: 12, padding: "7px 11px" }}
             />
-            <button onClick={send} disabled={loading} style={{
-              background: "linear-gradient(135deg,#3b82f6,#8b5cf6)", border: "none",
-              borderRadius: 10, padding: "9px 14px", color: "white", cursor: "pointer", fontSize: 16
-            }}>➤</button>
+            <button
+              onClick={() => send()}
+              disabled={loading || !input.trim()}
+              className="btn btn-primary"
+              style={{ width: 34, height: 34, padding: 0, borderRadius: "var(--radius-md)" }}
+            >
+              <Send size={13} />
+            </button>
           </div>
         </div>
       )}

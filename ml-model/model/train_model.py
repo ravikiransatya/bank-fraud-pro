@@ -24,4 +24,4 @@ print(classification_report(y_test, model.predict(X_test)))
 
 # Save the model
 joblib.dump(model, 'fraud_model.pkl')
-print("✅ Model saved!")
+print("[OK] Model saved!")
