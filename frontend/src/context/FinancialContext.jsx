@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
-import API from "../services/api";
+import API, { getApiBaseUrl } from "../services/api";
 
 const FinancialContext = createContext(null);
 
@@ -81,7 +81,7 @@ export function FinancialProvider({ phone, children }) {
 
     const connectSSE = () => {
       try {
-        const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+        const apiBase = getApiBaseUrl();
         const streamBase = apiBase.replace(/\/api\/?$/, "");
         const streamUrl = `${streamBase}/api/events/stream?phone=${encodeURIComponent(phone)}`;
         eventSource = new EventSource(streamUrl);

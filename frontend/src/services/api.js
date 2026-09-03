@@ -1,8 +1,27 @@
 import axios from "axios";
 
+// Determine the active API base URL with fallback to deployed Render backend
+export const getApiBaseUrl = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  // When running in production build or on non-localhost domain (e.g. Vercel, Render), route to deployed Render backend
+  if (
+    import.meta.env.PROD ||
+    (typeof window !== "undefined" &&
+      window.location.hostname !== "localhost" &&
+      window.location.hostname !== "127.0.0.1")
+  ) {
+    return "https://bank-fraud-pro.onrender.com/api";
+  }
+  return "http://localhost:5000/api";
+};
+
+export const API_BASE_URL = getApiBaseUrl();
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
-  timeout: 15000,
+  baseURL: API_BASE_URL,
+  timeout: 20000,
   headers: {
     "Content-Type": "application/json",
   },
