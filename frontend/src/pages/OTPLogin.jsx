@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { ShieldCheck, Lock, Smartphone, ArrowRight, RefreshCw, AlertCircle, CheckCircle2, Shield } from "lucide-react";
-import axios from "axios";
+import API from "../services/api";
 import { getClientDeviceMetadata } from "../utils/deviceFingerprint";
 
 export default function OTPLogin({ onLogin }) {
@@ -37,7 +37,7 @@ export default function OTPLogin({ onLogin }) {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/send-otp", {
+      const response = await API.post("/auth/send-otp", {
         phone: cleanPhone,
       });
 
@@ -53,7 +53,7 @@ export default function OTPLogin({ onLogin }) {
         setError(response.data.message || "Failed to deliver SMS OTP. Please try again.");
       }
     } catch (err) {
-      const msg = err.response?.data?.message || "Unable to contact authentication server. Please verify your connection.";
+      const msg = err.message || "Unable to contact authentication server. Please verify your connection.";
       setError(msg);
     } finally {
       setLoading(false);
@@ -110,7 +110,7 @@ export default function OTPLogin({ onLogin }) {
     setLoading(true);
     try {
       const clientMetadata = getClientDeviceMetadata();
-      const response = await axios.post("http://localhost:5000/api/auth/verify-otp", {
+      const response = await API.post("/auth/verify-otp", {
         phone: phone.trim().replace(/\D/g, ""),
         otp: fullOtp,
         clientMetadata,
@@ -128,7 +128,7 @@ export default function OTPLogin({ onLogin }) {
         setError(response.data.message || "Invalid or expired verification code.");
       }
     } catch (err) {
-      const msg = err.response?.data?.message || "Verification failed. Please check the code and try again.";
+      const msg = err.message || "Verification failed. Please check the code and try again.";
       setError(msg);
     } finally {
       setLoading(false);
@@ -139,30 +139,30 @@ export default function OTPLogin({ onLogin }) {
     <div
       style={{
         minHeight: "100vh",
+        minHeight: "100dvh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "var(--bg-base)",
-        padding: 24,
+        padding: "16px 12px",
       }}
     >
       <div
+        className="bg-card"
         style={{
           width: "100%",
           maxWidth: 960,
           display: "grid",
-          gridTemplateColumns: "1.1fr 1fr",
-          background: "var(--bg-surface)",
-          border: "1px solid var(--border-card)",
-          borderRadius: 16,
+          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          borderRadius: "var(--radius-xl)",
           boxShadow: "var(--shadow-modal)",
           overflow: "hidden",
         }}
       >
-        {/* LEFT COLUMN: Security Value Proposition */}
+        {/* LEFT COLUMN: Security Value Proposition (Desktop) */}
         <div
           style={{
-            padding: "44px 40px",
+            padding: "40px 36px",
             background: "#f8fafc",
             borderRight: "1px solid var(--border-card)",
             display: "flex",
@@ -172,7 +172,7 @@ export default function OTPLogin({ onLogin }) {
           className="hidden-mobile"
         >
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 28 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
               <div
                 style={{
                   width: 38,
@@ -201,11 +201,11 @@ export default function OTPLogin({ onLogin }) {
             <div style={{ fontSize: 22, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-heading)", lineHeight: 1.3, marginBottom: 12 }}>
               Enterprise Defense for Connected Financial Accounts
             </div>
-            <p style={{ fontSize: 13.5, color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: 28 }}>
+            <p style={{ fontSize: 13.5, color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: 24 }}>
               Continuous real-time fraud monitoring, transaction screening, and machine learning anomaly detection.
             </p>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {[
                 { title: "Carrier SMS Authentication", desc: "Cryptographic single-use token dispatched directly to your registered SIM." },
                 { title: "Random Forest Anomaly Detection", desc: "Sub-5ms evaluation of transaction velocity, geolocation, and amount baselines." },
@@ -237,19 +237,45 @@ export default function OTPLogin({ onLogin }) {
             </div>
           </div>
 
-          <div style={{ borderTop: "1px solid var(--border-card)", paddingTop: 18, marginTop: 32, display: "flex", alignItems: "center", gap: 8, color: "var(--text-muted)", fontSize: 11 }}>
+          <div style={{ borderTop: "1px solid var(--border-card)", paddingTop: 16, marginTop: 28, display: "flex", alignItems: "center", gap: 8, color: "var(--text-muted)", fontSize: 11 }}>
             <Lock size={12} style={{ color: "var(--brand-primary)" }} />
             <span>256-Bit TLS & Carrier-Enforced Authentication</span>
           </div>
         </div>
 
         {/* RIGHT COLUMN: Authentication Portal */}
-        <div style={{ padding: "44px 38px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <div style={{ marginBottom: 24 }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}>
+        <div style={{ padding: "32px 24px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          {/* Mobile Branding Header */}
+          <div className="mobile-only" style={{ alignItems: "center", gap: 10, marginBottom: 20 }}>
+            <div
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: 8,
+                background: "var(--brand-primary)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#ffffff",
+              }}
+            >
+              <ShieldCheck size={20} />
+            </div>
+            <div>
+              <div style={{ fontSize: 16, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}>
+                BankGuard <span style={{ color: "var(--brand-primary)" }}>AI</span>
+              </div>
+              <div style={{ fontSize: 9.5, color: "var(--text-muted)", fontWeight: 700, textTransform: "uppercase" }}>
+                Financial Security
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 19, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}>
               {step === "phone" ? "Sign In to BankGuard" : "Verify Carrier SMS OTP"}
             </div>
-            <p style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>
+            <p style={{ fontSize: 12.5, color: "var(--text-muted)", marginTop: 4 }}>
               {step === "phone"
                 ? "Enter your 10-digit registered Indian mobile number."
                 : `Enter the 6-digit code sent via SMS to +91 ${phone}`}
@@ -361,7 +387,7 @@ export default function OTPLogin({ onLogin }) {
                 </label>
 
                 {/* 6 Box Inputs */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 8 }} onPaste={handleOtpPaste}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 6 }} onPaste={handleOtpPaste}>
                   {otp.map((digit, index) => (
                     <input
                       key={index}
@@ -374,11 +400,12 @@ export default function OTPLogin({ onLogin }) {
                       onKeyDown={(e) => handleOtpKeyDown(index, e)}
                       className="bg-input tabular-nums"
                       style={{
-                        height: 48,
+                        height: 46,
                         textAlign: "center",
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: 800,
                         padding: 0,
+                        minWidth: 0,
                       }}
                     />
                   ))}

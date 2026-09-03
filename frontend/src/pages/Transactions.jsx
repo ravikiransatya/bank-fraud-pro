@@ -163,18 +163,18 @@ export default function Transactions() {
       <div
         className="bg-card"
         style={{
-          padding: "14px 18px",
-          marginBottom: 18,
+          padding: "12px 14px",
+          marginBottom: 16,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           flexWrap: "wrap",
-          gap: 12,
+          gap: 10,
         }}
       >
         {/* Search Input */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, minWidth: 220, position: "relative" }}>
-          <Search size={16} style={{ color: "var(--text-muted)", position: "absolute", left: 12 }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flex: "1 1 200px", minWidth: 160, position: "relative" }}>
+          <Search size={15} style={{ color: "var(--text-muted)", position: "absolute", left: 10 }} />
           <input
             type="text"
             className="bg-input"
@@ -183,13 +183,13 @@ export default function Transactions() {
               setSearch(e.target.value);
               setCurrentPage(1);
             }}
-            placeholder="Search by merchant, bank, location or ref ID..."
-            style={{ paddingLeft: 36, fontSize: 13 }}
+            placeholder="Search merchant, bank, location..."
+            style={{ paddingLeft: 32, fontSize: 12.5 }}
           />
         </div>
 
         {/* Channel Pills */}
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
           {types.map((t) => {
             const isActive = filterType === t;
             return (
@@ -201,8 +201,8 @@ export default function Transactions() {
                 }}
                 className="btn"
                 style={{
-                  padding: "5px 12px",
-                  fontSize: 12,
+                  padding: "4px 10px",
+                  fontSize: 11.5,
                   borderRadius: "var(--radius-pill)",
                   background: isActive ? "var(--brand-primary-light)" : "#ffffff",
                   color: isActive ? "var(--brand-primary)" : "var(--text-secondary)",
@@ -215,41 +215,44 @@ export default function Transactions() {
           })}
         </div>
 
-        {/* Bank Dropdown */}
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 600 }}>Bank:</span>
-          <select
-            value={bankFilter}
-            onChange={(e) => {
-              setBankFilter(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="bg-input"
-            style={{ width: "auto", padding: "5px 10px", fontSize: 12 }}
-          >
-            {banks.map((b) => (
-              <option key={b} value={b}>{b === "All" ? "All Banks" : b}</option>
-            ))}
-          </select>
-        </div>
+        {/* Dropdowns Container */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+          {/* Bank Dropdown */}
+          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <span style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 600 }}>Bank:</span>
+            <select
+              value={bankFilter}
+              onChange={(e) => {
+                setBankFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="bg-input"
+              style={{ width: "auto", padding: "4px 8px", fontSize: 11.5 }}
+            >
+              {banks.map((b) => (
+                <option key={b} value={b}>{b === "All" ? "All Banks" : b}</option>
+              ))}
+            </select>
+          </div>
 
-        {/* Risk Dropdown */}
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 600 }}>Risk:</span>
-          <select
-            value={riskFilter}
-            onChange={(e) => {
-              setRiskFilter(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="bg-input"
-            style={{ width: "auto", padding: "5px 10px", fontSize: 12 }}
-          >
-            <option value="All">All Risk Levels</option>
-            <option value="Safe">Safe Only (&lt; 40%)</option>
-            <option value="Flagged">Flagged (40% – 69%)</option>
-            <option value="HighRisk">High Risk / Blocked (≥ 70%)</option>
-          </select>
+          {/* Risk Dropdown */}
+          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <span style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 600 }}>Risk:</span>
+            <select
+              value={riskFilter}
+              onChange={(e) => {
+                setRiskFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="bg-input"
+              style={{ width: "auto", padding: "4px 8px", fontSize: 11.5 }}
+            >
+              <option value="All">All Risk</option>
+              <option value="Safe">Safe (&lt; 40%)</option>
+              <option value="Flagged">Flagged (40–69%)</option>
+              <option value="HighRisk">High Risk (≥ 70%)</option>
+            </select>
+          </div>
         </div>
       </div>
 

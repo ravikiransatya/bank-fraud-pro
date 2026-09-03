@@ -250,9 +250,9 @@ export default function AlertDetailDrawer({ alertId, onClose }) {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
                   gap: 10,
-                  padding: "14px 16px",
+                  padding: "12px 14px",
                   background: "#f8fafc",
                   border: "1px solid var(--border-card)",
                   borderRadius: 8,

@@ -127,9 +127,9 @@ export default function FraudAlerts() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
-          gap: 12,
-          marginBottom: 18,
+          gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
+          gap: 10,
+          marginBottom: 16,
         }}
       >
         {[
@@ -139,12 +139,12 @@ export default function FraudAlerts() {
           { label: "Quarantined / Blocked", value: blockedCount, badge: "Shielded", type: "danger" },
           { label: "Resolved Historical", value: resolvedCount, badge: "Cleared", type: "safe" },
         ].map((stat, idx) => (
-          <div key={idx} className="bg-card" style={{ padding: "12px 16px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+          <div key={idx} className="bg-card" style={{ padding: "10px 14px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10.5, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
               <span>{stat.label}</span>
-              <span className={`badge badge-${stat.type}`} style={{ fontSize: 9.5, padding: "1px 5px" }}>{stat.badge}</span>
+              <span className={`badge badge-${stat.type}`} style={{ fontSize: 9, padding: "1px 4px" }}>{stat.badge}</span>
             </div>
-            <div className="tabular-nums" style={{ fontSize: 20, fontWeight: 800, color: "var(--text-primary)", marginTop: 4 }}>
+            <div className="tabular-nums" style={{ fontSize: 18, fontWeight: 800, color: "var(--text-primary)", marginTop: 3 }}>
               {stat.value}
             </div>
           </div>
@@ -155,8 +155,8 @@ export default function FraudAlerts() {
       <div
         className="bg-card"
         style={{
-          padding: "12px 16px",
-          marginBottom: 18,
+          padding: "10px 14px",
+          marginBottom: 16,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -165,54 +165,57 @@ export default function FraudAlerts() {
         }}
       >
         {/* Search */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, minWidth: 200, position: "relative" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flex: "1 1 180px", minWidth: 160, position: "relative" }}>
           <Search size={15} style={{ color: "var(--text-muted)", position: "absolute", left: 10 }} />
           <input
             type="text"
             className="bg-input"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search threats, accounts, or anomaly reasons..."
-            style={{ paddingLeft: 32, fontSize: 12.5 }}
+            placeholder="Search threats, accounts, reasons..."
+            style={{ paddingLeft: 30, fontSize: 12 }}
           />
         </div>
 
-        {/* Severity Filter */}
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 600 }}>Severity:</span>
-          <select
-            value={severityFilter}
-            onChange={(e) => setSeverityFilter(e.target.value)}
-            className="bg-input"
-            style={{ width: "auto", padding: "4px 8px", fontSize: 12 }}
-          >
-            <option value="All">All Severities</option>
-            <option value="Critical">Critical</option>
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
-          </select>
-        </div>
+        {/* Dropdowns */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+          {/* Severity Filter */}
+          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>Severity:</span>
+            <select
+              value={severityFilter}
+              onChange={(e) => setSeverityFilter(e.target.value)}
+              className="bg-input"
+              style={{ width: "auto", padding: "3px 6px", fontSize: 11.5 }}
+            >
+              <option value="All">All</option>
+              <option value="Critical">Critical</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
 
-        {/* Sort By */}
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 600 }}>Sort By:</span>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="bg-input"
-            style={{ width: "auto", padding: "4px 8px", fontSize: 12 }}
-          >
-            <option value="date">Date Detected</option>
-            <option value="riskScore">Risk Score (High to Low)</option>
-            <option value="amount">Amount at Risk</option>
-            <option value="severity">Severity Rank</option>
-          </select>
+          {/* Sort By */}
+          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>Sort:</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="bg-input"
+              style={{ width: "auto", padding: "3px 6px", fontSize: 11.5 }}
+            >
+              <option value="date">Date</option>
+              <option value="riskScore">Risk Score</option>
+              <option value="amount">Amount</option>
+              <option value="severity">Severity</option>
+            </select>
+          </div>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div style={{ display: "flex", gap: 6, marginBottom: 16, borderBottom: "1px solid var(--border-card)", paddingBottom: 8, overflowX: "auto" }}>
+      <div style={{ display: "flex", gap: 6, marginBottom: 16, borderBottom: "1px solid var(--border-card)", paddingBottom: 8, overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
         {[
           { key: "all", label: `Active (${totalActive})` },
           { key: "critical", label: `Critical (${criticalCount})` },

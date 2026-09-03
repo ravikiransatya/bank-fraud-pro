@@ -53,7 +53,7 @@ export default function IncidentDetailModal({ incident, phone, onActionComplete,
         alignItems: "center",
         justifyContent: "center",
         zIndex: 1150,
-        padding: 20,
+        padding: "16px 12px",
       }}
       onClick={onClose}
     >
@@ -74,7 +74,7 @@ export default function IncidentDetailModal({ incident, phone, onActionComplete,
         {/* Header Banner */}
         <div
           style={{
-            padding: "16px 22px",
+            padding: "14px 18px",
             borderBottom: "1px solid var(--border-card)",
             display: "flex",
             alignItems: "center",
@@ -95,78 +95,51 @@ export default function IncidentDetailModal({ incident, phone, onActionComplete,
               <ShieldCheck size={22} style={{ color: "var(--semantic-safe)" }} />
             )}
             <div>
-              <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}>
+              <div style={{ fontSize: 14.5, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}>
                 Security Incident: {incident.incidentId || incident.id}
               </div>
-              <div style={{ fontSize: 11, color: "var(--text-muted)" }}>
-                Severity: <strong style={{ color: "var(--text-primary)" }}>{incident.severity}</strong> · Status: <strong style={{ color: "var(--text-primary)" }}>{incident.status}</strong>
+              <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 1 }}>
+                Status: <strong style={{ color: "var(--text-primary)" }}>{incident.status}</strong> · Severity: <strong style={{ color: "var(--text-primary)" }}>{incident.severity}</strong>
               </div>
             </div>
           </div>
 
-          <button onClick={onClose} className="btn btn-ghost" style={{ width: 30, height: 30, padding: 0 }}>
-            <X size={16} />
+          <button onClick={onClose} className="btn btn-ghost" style={{ width: 32, height: 32, padding: 0 }}>
+            <X size={18} />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div style={{ padding: "20px 24px", overflowY: "auto", flex: 1, display: "flex", flexDirection: "column", gap: 18 }}>
-          {/* Summary */}
+        <div style={{ padding: "16px 18px", overflowY: "auto", display: "flex", flexDirection: "column", gap: 16 }}>
           <div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text-primary)" }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}>
               {incident.title}
             </div>
             <p style={{ fontSize: 12.5, color: "var(--text-secondary)", lineHeight: 1.5, marginTop: 4 }}>
-              {incident.summary}
+              {incident.description}
             </p>
           </div>
 
-          {/* Triggered Rules */}
-          {incident.triggeredRules && incident.triggeredRules.length > 0 && (
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 8 }}>
-                Triggered Security Rules
-              </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {incident.triggeredRules.map((rule, idx) => (
-                  <span key={idx} className="badge badge-danger" style={{ fontSize: 11 }}>
-                    • {rule}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Chronological Timeline */}
+          {/* Killchain Progression Steps */}
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 10 }}>
-              Chronological Security Timeline
+            <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 8 }}>
+              Observed Event Telemetry Chain
             </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingLeft: 8, borderLeft: "2px solid var(--border-card)" }}>
-              {(incident.timeline || []).map((step, idx) => (
-                <div key={idx} style={{ position: "relative", paddingLeft: 14 }}>
-                  <div
-                    style={{
-                      position: "absolute",
-                      left: -13,
-                      top: 4,
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      background: step.severity === "CRITICAL"
-                        ? "var(--semantic-danger)"
-                        : step.severity === "HIGH"
-                        ? "var(--semantic-warning)"
-                        : "var(--brand-primary)",
-                    }}
-                  />
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span className="tabular-nums" style={{ fontSize: 11, fontWeight: 700, color: "var(--text-primary)" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {incident.steps?.map((step, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    padding: "9px 12px",
+                    background: "#f8fafc",
+                    border: "1px solid var(--border-subtle)",
+                    borderRadius: 8,
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
+                    <span style={{ fontWeight: 700, color: "var(--text-primary)" }}>Step {idx + 1}</span>
+                    <span className="tabular-nums" style={{ color: "var(--text-muted)" }}>
                       {step.time}
-                    </span>
-                    <span style={{ fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", fontWeight: 600 }}>
-                      [{step.actor || "SYSTEM"}]
                     </span>
                   </div>
                   <div style={{ fontSize: 12, color: "var(--text-secondary)", marginTop: 1 }}>
@@ -181,7 +154,7 @@ export default function IncidentDetailModal({ incident, phone, onActionComplete,
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
+              gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
               gap: 10,
               padding: "12px 14px",
               background: "#f8fafc",

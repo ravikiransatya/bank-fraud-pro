@@ -97,44 +97,44 @@ export default function Dashboard({ onNavigate }) {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
       {/* 1. TOP BANNER: GREETING & EMERGENCY ACTION CONTROLS */}
       <div
         className="bg-card"
         style={{
-          padding: "20px 24px",
+          padding: "18px 20px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           flexWrap: "wrap",
-          gap: 16,
+          gap: 14,
         }}
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 0.6, color: "var(--brand-primary)", textTransform: "uppercase" }}>
+            <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 0.6, color: "var(--brand-primary)", textTransform: "uppercase" }}>
               Financial Security Overview
             </span>
             <span style={{ color: "var(--text-muted)", fontSize: 12 }}>•</span>
-            <span style={{ fontSize: 12, color: "var(--text-muted)" }}>
+            <span style={{ fontSize: 11.5, color: "var(--text-muted)" }}>
               Updated {dashboard?.lastUpdated ? "Just now" : "loading..."}
             </span>
           </div>
-          <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}>
+          <h1 style={{ fontSize: 20, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}>
             Good afternoon, +91 {maskedPhone}
           </h1>
-          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 2 }}>
+          <p style={{ fontSize: 12.5, color: "var(--text-secondary)", marginTop: 2 }}>
             Real-time monitoring and threat protection active across your {dashboard?.monitoredAccounts || accounts.length || 6} linked financial institutions.
           </p>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", width: "100%", maxWidth: "max-content" }}>
           {/* Emergency Account Freeze Button */}
           <button
             onClick={handleToggleFreeze}
             disabled={freezing}
             className={`btn ${isFrozen ? "btn-danger" : "btn-secondary"}`}
-            style={{ fontSize: 12.5 }}
+            style={{ fontSize: 12, flex: "1 1 auto" }}
           >
             {isFrozen ? <Unlock size={14} /> : <Lock size={14} />}
             {freezing ? "Updating..." : isFrozen ? "Unfreeze Accounts" : "Freeze Accounts"}
@@ -144,7 +144,7 @@ export default function Dashboard({ onNavigate }) {
           <button
             onClick={() => onNavigate && onNavigate("alerts")}
             className="btn btn-primary"
-            style={{ fontSize: 12.5 }}
+            style={{ fontSize: 12, flex: "1 1 auto" }}
           >
             <ShieldAlert size={14} /> Review Threat Radar
           </button>
@@ -155,8 +155,8 @@ export default function Dashboard({ onNavigate }) {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-          gap: 16,
+          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+          gap: 14,
         }}
       >
         {loading ? (
@@ -306,7 +306,7 @@ export default function Dashboard({ onNavigate }) {
       </div>
 
       {/* 4. MAIN WORKSPACE: RECENT ACTIVITY & THREAT RADAR */}
-      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 20 }}>
+      <div className="dashboard-main-grid">
         {/* Left Column: Recent Statement Activity */}
         <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>

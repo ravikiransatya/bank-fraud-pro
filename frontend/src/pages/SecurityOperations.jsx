@@ -137,7 +137,7 @@ export default function SecurityOperations() {
       </div>
 
       {/* Grid: Live Feed (Left) & Active Incidents (Right) */}
-      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 20, marginBottom: 24 }}>
+      <div className="soc-grid" style={{ marginBottom: 18 }}>
         {/* Left Column: Real-time Live Security Monitor */}
         <div>
           <LiveSecurityFeed phone={phone} />

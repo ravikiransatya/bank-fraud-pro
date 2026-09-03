@@ -57,9 +57,9 @@ export default function LinkedBanks() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-          gap: 18,
-          marginBottom: 24,
+          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+          gap: 14,
+          marginBottom: 20,
         }}
       >
         {loading ? (
@@ -75,11 +75,11 @@ export default function LinkedBanks() {
                 key={b.id || i}
                 className="bg-card"
                 style={{
-                  padding: "20px 22px",
+                  padding: "16px 18px",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  minHeight: 180,
+                  minHeight: 170,
                   borderTop: `4px solid ${accentColor}`,
                   transition: "transform 0.15s ease, box-shadow 0.15s ease",
                 }}

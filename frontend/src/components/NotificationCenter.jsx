@@ -95,10 +95,11 @@ export default function NotificationCenter({ phone, onNavigate, onClose }) {
       className="bg-card"
       style={{
         position: "absolute",
-        top: 48,
+        top: 44,
         right: 0,
-        width: 380,
-        maxHeight: 520,
+        width: 360,
+        maxWidth: "calc(100vw - 24px)",
+        maxHeight: "80vh",
         boxShadow: "var(--shadow-modal)",
         borderRadius: 12,
         zIndex: 1200,

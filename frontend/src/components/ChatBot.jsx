@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { ShieldCheck, MessageSquare, X, Send, Bot, User, Sparkles, RefreshCw } from "lucide-react";
+import API from "../services/api";
 
 export default function ChatBot({ phone }) {
   const [open, setOpen] = useState(false);
@@ -33,23 +34,19 @@ export default function ChatBot({ phone }) {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are an executive BankGuard AI Financial Security Analyst and Cybercrime Prevention Expert. Provide clear, professional, concise, and structured financial intelligence advice regarding fraud alerts, anomaly detection, chargebacks, and account security. Keep answers direct and authoritative.",
-            },
-            ...messages,
-            userMsg,
-          ],
-        }),
+      const response = await API.post("/chat", {
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are an executive BankGuard AI Financial Security Analyst and Cybercrime Prevention Expert. Provide clear, professional, concise, and structured financial intelligence advice regarding fraud alerts, anomaly detection, chargebacks, and account security. Keep answers direct and authoritative.",
+          },
+          ...messages,
+          userMsg,
+        ],
       });
 
-      const data = await response.json();
+      const data = response.data;
       const reply = data.choices?.[0]?.message?.content || "I have screened your query. No anomalous behavior was detected in this activity.";
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (e) {
@@ -70,10 +67,10 @@ export default function ChatBot({ phone }) {
         className="btn btn-primary"
         style={{
           position: "fixed",
-          bottom: 24,
-          right: 24,
-          width: 50,
-          height: 50,
+          bottom: "calc(env(safe-area-inset-bottom, 0px) + 74px)",
+          right: 16,
+          width: 48,
+          height: 48,
           borderRadius: "50%",
           padding: 0,
           boxShadow: "0 4px 16px rgba(4, 120, 87, 0.35)",
@@ -90,11 +87,12 @@ export default function ChatBot({ phone }) {
           className="bg-card"
           style={{
             position: "fixed",
-            bottom: 84,
-            right: 24,
+            bottom: "calc(env(safe-area-inset-bottom, 0px) + 70px)",
+            right: 16,
             width: 380,
             maxWidth: "calc(100vw - 32px)",
-            height: 520,
+            maxHeight: "calc(100dvh - 100px)",
+            height: 480,
             borderRadius: 16,
             display: "flex",
             flexDirection: "column",

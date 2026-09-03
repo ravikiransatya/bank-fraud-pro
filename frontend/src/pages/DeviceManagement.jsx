@@ -247,7 +247,7 @@ export default function DeviceManagement() {
       )}
 
       {/* Dynamic Grid of Devices */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: 18, marginBottom: 24 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(270px, 1fr))", gap: 14, marginBottom: 20 }}>
         {loading ? (
           [1, 2, 3].map((i) => (
             <div key={i} className="bg-card skeleton" style={{ height: 210, borderRadius: 12 }} />
@@ -266,7 +266,7 @@ export default function DeviceManagement() {
                 key={dev.id || dev._id}
                 className="bg-card"
                 style={{
-                  padding: "20px 22px",
+                  padding: "16px 18px",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",

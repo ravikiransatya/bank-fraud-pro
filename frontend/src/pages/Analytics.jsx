@@ -98,11 +98,11 @@ export default function Analytics() {
       </div>
 
       {/* Grid 1: Security Anomaly & Alert Severity Distribution */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
+      <div className="responsive-grid-2" style={{ marginBottom: 18 }}>
         {/* Anomaly Types Breakdown */}
-        <div className="bg-card" style={{ padding: 22 }}>
+        <div className="bg-card" style={{ padding: 18 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ fontSize: 13.5, fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: 8 }}>
               <Layers size={16} style={{ color: "var(--brand-primary)" }} /> Detected Anomaly Categories
             </div>
             <span className="badge badge-neutral">Categorized Signals</span>
@@ -137,52 +137,52 @@ export default function Analytics() {
         </div>
 
         {/* Alert Severity Breakdown */}
-        <div className="bg-card" style={{ padding: 22 }}>
+        <div className="bg-card" style={{ padding: 18 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ fontSize: 13.5, fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: 8 }}>
               <ShieldAlert size={16} style={{ color: "var(--semantic-danger)" }} /> Alert Severity Matrix
             </div>
             <span className="badge badge-neutral">{alerts.length} Total Events</span>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
-            <div style={{ padding: "14px 16px", background: "var(--semantic-danger-bg)", border: "1px solid var(--semantic-danger-border)", borderRadius: 8 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--semantic-danger)", textTransform: "uppercase" }}>CRITICAL</div>
-              <div className="tabular-nums" style={{ fontSize: 24, fontWeight: 800, color: "var(--semantic-danger)", marginTop: 2 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 10, marginBottom: 14 }}>
+            <div style={{ padding: "12px 14px", background: "var(--semantic-danger-bg)", border: "1px solid var(--semantic-danger-border)", borderRadius: 8 }}>
+              <div style={{ fontSize: 10.5, fontWeight: 700, color: "var(--semantic-danger)", textTransform: "uppercase" }}>CRITICAL</div>
+              <div className="tabular-nums" style={{ fontSize: 22, fontWeight: 800, color: "var(--semantic-danger)", marginTop: 2 }}>
                 {severityCounts.CRITICAL || 0}
               </div>
-              <div style={{ fontSize: 10.5, color: "var(--text-muted)", marginTop: 2 }}>Auto-Quarantined Outflows</div>
+              <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2 }}>Auto-Quarantined Outflows</div>
             </div>
 
-            <div style={{ padding: "14px 16px", background: "var(--semantic-warning-bg)", border: "1px solid var(--semantic-warning-border)", borderRadius: 8 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--semantic-warning)", textTransform: "uppercase" }}>HIGH RISK</div>
-              <div className="tabular-nums" style={{ fontSize: 24, fontWeight: 800, color: "var(--semantic-warning)", marginTop: 2 }}>
+            <div style={{ padding: "12px 14px", background: "var(--semantic-warning-bg)", border: "1px solid var(--semantic-warning-border)", borderRadius: 8 }}>
+              <div style={{ fontSize: 10.5, fontWeight: 700, color: "var(--semantic-warning)", textTransform: "uppercase" }}>HIGH RISK</div>
+              <div className="tabular-nums" style={{ fontSize: 22, fontWeight: 800, color: "var(--semantic-warning)", marginTop: 2 }}>
                 {severityCounts.HIGH || 0}
               </div>
-              <div style={{ fontSize: 10.5, color: "var(--text-muted)", marginTop: 2 }}>High Behavioral Deviation</div>
+              <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2 }}>High Behavioral Deviation</div>
             </div>
 
-            <div style={{ padding: "14px 16px", background: "#f8fafc", border: "1px solid var(--border-card)", borderRadius: 8 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase" }}>MEDIUM RISK</div>
-              <div className="tabular-nums" style={{ fontSize: 24, fontWeight: 800, color: "var(--text-primary)", marginTop: 2 }}>
+            <div style={{ padding: "12px 14px", background: "#f8fafc", border: "1px solid var(--border-card)", borderRadius: 8 }}>
+              <div style={{ fontSize: 10.5, fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase" }}>MEDIUM RISK</div>
+              <div className="tabular-nums" style={{ fontSize: 22, fontWeight: 800, color: "var(--text-primary)", marginTop: 2 }}>
                 {severityCounts.MEDIUM || 0}
               </div>
-              <div style={{ fontSize: 10.5, color: "var(--text-muted)", marginTop: 2 }}>Moderate Threshold Surges</div>
+              <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2 }}>Moderate Threshold Surges</div>
             </div>
 
-            <div style={{ padding: "14px 16px", background: "var(--semantic-safe-bg)", border: "1px solid var(--semantic-safe-border)", borderRadius: 8 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--semantic-safe)", textTransform: "uppercase" }}>RESOLVED / LOW</div>
-              <div className="tabular-nums" style={{ fontSize: 24, fontWeight: 800, color: "var(--semantic-safe)", marginTop: 2 }}>
+            <div style={{ padding: "12px 14px", background: "var(--semantic-safe-bg)", border: "1px solid var(--semantic-safe-border)", borderRadius: 8 }}>
+              <div style={{ fontSize: 10.5, fontWeight: 700, color: "var(--semantic-safe)", textTransform: "uppercase" }}>RESOLVED / LOW</div>
+              <div className="tabular-nums" style={{ fontSize: 22, fontWeight: 800, color: "var(--semantic-safe)", marginTop: 2 }}>
                 {severityCounts.LOW + alerts.filter(a => a.status === "RESOLVED").length}
               </div>
-              <div style={{ fontSize: 10.5, color: "var(--text-muted)", marginTop: 2 }}>Verified & Cleared Baseline</div>
+              <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2 }}>Verified & Cleared Baseline</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Grid 2: Channel Volume Distribution & Feature Importance */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
+      <div className="responsive-grid-2" style={{ marginBottom: 18 }}>
         {/* Channel Volume Distribution */}
         <div className="bg-card" style={{ padding: 22 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>

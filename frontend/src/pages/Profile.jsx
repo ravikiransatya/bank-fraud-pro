@@ -82,13 +82,13 @@ export default function Profile({ onLogout }) {
       </div>
 
       {/* Main Profile Card */}
-      <div className="bg-card" style={{ padding: 24, marginBottom: 20 }}>
+      <div className="bg-card" style={{ padding: "18px 18px", marginBottom: 18 }}>
         {/* User Identity Header */}
-        <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 24, paddingBottom: 20, borderBottom: "1px solid var(--border-subtle)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid var(--border-subtle)", flexWrap: "wrap" }}>
           <div
             style={{
-              width: 50,
-              height: 50,
+              width: 46,
+              height: 46,
               borderRadius: "50%",
               background: "var(--brand-primary-light)",
               border: "2px solid var(--brand-primary)",
@@ -103,19 +103,19 @@ export default function Profile({ onLogout }) {
             {phone ? phone.slice(0, 1) : "U"}
           </div>
           <div>
-            <div style={{ fontSize: 17, fontWeight: 700, color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}>
+            <div style={{ fontSize: 16, fontWeight: 700, color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}>
               +91 {maskedPhone}
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4, flexWrap: "wrap" }}>
               <span className="badge badge-safe">
-                <CheckCircle2 size={11} /> KYC & Telecom Verified
+                <CheckCircle2 size={11} /> KYC Verified
               </span>
               <span className="badge badge-neutral">
                 {accounts.length} Banks Linked
               </span>
               {sseConnected && (
                 <span className="badge badge-safe" style={{ fontSize: 10 }}>
-                  <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--semantic-safe)" }} className="live-pulse" /> Live SSE Active
+                  <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--semantic-safe)" }} className="live-pulse" /> SSE Live
                 </span>
               )}
             </div>
@@ -123,17 +123,17 @@ export default function Profile({ onLogout }) {
         </div>
 
         {/* Authentication Matrix */}
-        <div style={{ marginBottom: 20 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 12 }}>
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 10.5, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 10 }}>
             Authentication & Verification Matrix
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[
               { icon: Smartphone, label: "2Factor Carrier SMS OTP", status: "Active & Enforced", type: "safe" },
-              { icon: Lock, label: "JWT Session Signing (HMAC-SHA256)", status: "Active (7-Day Validity)", type: "safe" },
+              { icon: Lock, label: "JWT Session Signing", status: "Active (7-Day)", type: "safe" },
               { icon: Shield, label: "Random Forest ML Risk Engine", status: "Enabled (Live)", type: "safe" },
               { icon: Landmark, label: "Total Monitored Capital", status: `₹${(dashboard?.totalBalance || 0).toLocaleString("en-IN")}`, type: "neutral" },
-              { icon: Clock, label: "Current Session Authenticated", status: `${loginDate} at ${loginTime}`, type: "neutral" },
+              { icon: Clock, label: "Current Session", status: `${loginDate} at ${loginTime}`, type: "neutral" },
             ].map((item, idx) => {
               const Icon = item.icon;
               return (
@@ -143,17 +143,19 @@ export default function Profile({ onLogout }) {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    padding: "10px 14px",
+                    padding: "9px 12px",
                     background: "#f8fafc",
                     border: "1px solid var(--border-card)",
                     borderRadius: 8,
+                    flexWrap: "wrap",
+                    gap: 6,
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <div style={{ color: "var(--brand-primary)" }}><Icon size={16} /></div>
-                    <span style={{ fontSize: 13, color: "var(--text-primary)", fontWeight: 500 }}>{item.label}</span>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <div style={{ color: "var(--brand-primary)" }}><Icon size={15} /></div>
+                    <span style={{ fontSize: 12.5, color: "var(--text-primary)", fontWeight: 500 }}>{item.label}</span>
                   </div>
-                  <span className={`badge badge-${item.type}`}>{item.status}</span>
+                  <span className={`badge badge-${item.type}`} style={{ fontSize: 10 }}>{item.status}</span>
                 </div>
               );
             })}

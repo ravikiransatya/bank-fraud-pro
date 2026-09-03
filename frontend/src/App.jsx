@@ -180,10 +180,13 @@ function AppShell({ user, setUser }) {
     );
   };
 
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-app)" }}>
-      {/* 1. INSTITUTIONAL SIDEBAR */}
+    <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-app)", position: "relative" }}>
+      {/* 1. DESKTOP INSTITUTIONAL SIDEBAR */}
       <aside
+        className="hidden-mobile"
         style={{
           width: 260,
           background: "var(--bg-sidebar)",
@@ -340,7 +343,7 @@ function AppShell({ user, setUser }) {
           ))}
         </div>
 
-        {/* User Institutional Profile Card Footer */}
+        {/* User Profile Card Footer */}
         <div
           style={{
             padding: "14px 16px",
@@ -390,35 +393,229 @@ function AppShell({ user, setUser }) {
         </div>
       </aside>
 
-      {/* 2. MAIN APPLICATION CONTENT AREA */}
+      {/* 2. SLIDE-OUT MOBILE NAVIGATION DRAWER */}
+      {mobileMenuOpen && (
+        <div className="mobile-drawer-backdrop" onClick={closeMobileMenu}>
+          <div className="mobile-drawer" onClick={(e) => e.stopPropagation()}>
+            {/* Drawer Header */}
+            <div
+              style={{
+                padding: "16px 18px",
+                borderBottom: "1px solid var(--border-card)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                background: "#ffffff",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div
+                  style={{
+                    width: 34,
+                    height: 34,
+                    borderRadius: "var(--radius-md)",
+                    background: "var(--brand-primary)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#ffffff",
+                  }}
+                >
+                  <ShieldCheck size={20} strokeWidth={2.4} />
+                </div>
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: 15, color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}>
+                    BankGuard <span style={{ color: "var(--brand-primary)" }}>AI</span>
+                  </div>
+                  <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", color: "var(--text-muted)", letterSpacing: 0.6 }}>
+                    Mobile Shield
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={closeMobileMenu}
+                className="btn btn-ghost"
+                style={{ width: 32, height: 32, padding: 0 }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Navigation Links */}
+            <div style={{ flex: 1, overflowY: "auto", padding: "14px 12px", display: "flex", flexDirection: "column", gap: 16 }}>
+              {navigationSections.map((section, sIdx) => (
+                <div key={sIdx}>
+                  <div
+                    style={{
+                      fontSize: 10,
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      letterSpacing: 0.8,
+                      color: "var(--text-muted)",
+                      padding: "0 8px",
+                      marginBottom: 4,
+                    }}
+                  >
+                    {section.heading}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    {section.items.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = page === item.key;
+                      return (
+                        <button
+                          key={item.key}
+                          onClick={() => {
+                            setPage(item.key);
+                            closeMobileMenu();
+                          }}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            padding: "9px 12px",
+                            borderRadius: "var(--radius-md)",
+                            border: isActive ? "1px solid var(--brand-primary)" : "1px solid transparent",
+                            background: isActive ? "var(--brand-primary-light)" : "transparent",
+                            color: isActive ? "var(--brand-primary)" : "var(--text-primary)",
+                            fontWeight: isActive ? 600 : 500,
+                            fontSize: 13,
+                            cursor: "pointer",
+                            width: "100%",
+                            textAlign: "left",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <Icon size={16} />
+                            <span>{item.label}</span>
+                          </div>
+                          {item.badge ? (
+                            <span className="badge badge-danger" style={{ fontSize: 10, padding: "1px 6px" }}>
+                              {item.badge}
+                            </span>
+                          ) : isActive ? (
+                            <ChevronRight size={13} style={{ opacity: 0.7 }} />
+                          ) : null}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* User Profile in Drawer Footer */}
+            <div
+              style={{
+                padding: "12px 14px",
+                borderTop: "1px solid var(--border-card)",
+                background: "#f8fafc",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div
+                  style={{
+                    width: 30,
+                    height: 30,
+                    borderRadius: "50%",
+                    background: "var(--brand-primary-light)",
+                    border: "1px solid var(--brand-primary)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 700,
+                    fontSize: 11,
+                    color: "var(--brand-primary)",
+                  }}
+                >
+                  +91
+                </div>
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)" }}>
+                    +91 {user?.slice(0, 5)}•••••
+                  </div>
+                  <div style={{ fontSize: 10, color: "var(--semantic-safe)", fontWeight: 600 }}>
+                    ● 2FA Protected
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setUser(null)}
+                className="btn btn-danger"
+                style={{ fontSize: 11, padding: "4px 8px" }}
+              >
+                <LogOut size={12} /> Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 3. MAIN APPLICATION CONTENT AREA */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
-        {/* TOP INSTITUTIONAL HEADER BAR */}
+        {/* TOP HEADER BAR (RESPONSIVE) */}
         <header
           style={{
-            height: 60,
+            height: 56,
             background: "var(--bg-card)",
             borderBottom: "1px solid var(--border-card)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: "0 28px",
+            padding: "0 16px",
             position: "sticky",
             top: 0,
             zIndex: 90,
           }}
         >
-          <div>
-            <div style={{ fontSize: 14.5, fontWeight: 700, color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}>
-              {getPageTitle()}
-            </div>
-            <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 1 }}>
-              Last synced: {formatRelativeTime(lastUpdated)}
+          {/* Left Header Area */}
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {/* Hamburger Button (Mobile Only) */}
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="btn btn-ghost mobile-only"
+              style={{ width: 34, height: 34, padding: 0 }}
+              title="Open Navigation Menu"
+            >
+              <Menu size={18} />
+            </button>
+
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)", fontFamily: "var(--font-heading)", lineHeight: 1.2 }}>
+                {getPageTitle()}
+              </div>
+              <div className="hidden-mobile" style={{ fontSize: 10.5, color: "var(--text-muted)", marginTop: 1 }}>
+                Last synced: {formatRelativeTime(lastUpdated)}
+              </div>
             </div>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 12, position: "relative" }}>
+          {/* Right Header Area */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, position: "relative" }}>
             {/* Real-time System Security Status Badge */}
-            {getStatusBadge()}
+            <div className="hidden-mobile">
+              {getStatusBadge()}
+            </div>
+
+            {/* Compact Status Dot for Mobile */}
+            <div className="mobile-only" style={{ marginRight: 2 }}>
+              <span
+                style={{
+                  display: "inline-block",
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  background: systemStatus === "CRITICAL" ? "var(--semantic-danger)" : systemStatus === "ATTENTION REQUIRED" ? "var(--semantic-warning)" : "var(--semantic-safe)",
+                }}
+                className={systemStatus !== "PROTECTED" ? "live-pulse" : ""}
+                title={systemStatus}
+              />
+            </div>
 
             {/* Manual Sync / Refresh */}
             <button
@@ -426,14 +623,14 @@ function AppShell({ user, setUser }) {
               disabled={refreshing}
               className="btn btn-ghost"
               style={{
-                width: 34,
-                height: 34,
+                width: 32,
+                height: 32,
                 padding: 0,
                 borderRadius: "var(--radius-md)",
               }}
               title="Synchronize real-time state"
             >
-              <RefreshCw size={15} className={refreshing ? "live-pulse" : ""} />
+              <RefreshCw size={14} className={refreshing ? "live-pulse" : ""} />
             </button>
 
             {/* Notification Center Popover Trigger */}
@@ -441,8 +638,8 @@ function AppShell({ user, setUser }) {
               onClick={() => setNotificationsOpen((prev) => !prev)}
               className="btn btn-ghost"
               style={{
-                width: 34,
-                height: 34,
+                width: 32,
+                height: 32,
                 padding: 0,
                 borderRadius: "var(--radius-md)",
                 position: "relative",
@@ -454,8 +651,8 @@ function AppShell({ user, setUser }) {
                 <span
                   style={{
                     position: "absolute",
-                    top: 6,
-                    right: 6,
+                    top: 5,
+                    right: 5,
                     width: 7,
                     height: 7,
                     borderRadius: "50%",
@@ -477,10 +674,66 @@ function AppShell({ user, setUser }) {
         </header>
 
         {/* CONTENT VIEWPORT */}
-        <main style={{ flex: 1, padding: "24px 28px", maxWidth: 1240, width: "100%", margin: "0 auto" }}>
+        <main style={{ flex: 1, maxWidth: 1240, width: "100%", margin: "0 auto" }}>
           {renderPage()}
         </main>
       </div>
+
+      {/* 4. MOBILE BOTTOM NAVIGATION DOCK (Thumb Friendly) */}
+      <nav className="mobile-bottom-dock">
+        <button
+          className={`dock-item ${page === "dashboard" ? "active" : ""}`}
+          onClick={() => setPage("dashboard")}
+        >
+          <LayoutDashboard size={18} />
+          <span>Dashboard</span>
+        </button>
+
+        <button
+          className={`dock-item ${page === "transactions" ? "active" : ""}`}
+          onClick={() => setPage("transactions")}
+        >
+          <Receipt size={18} />
+          <span>Ledger</span>
+        </button>
+
+        <button
+          className={`dock-item ${page === "alerts" ? "active" : ""}`}
+          onClick={() => setPage("alerts")}
+        >
+          <ShieldAlert size={18} />
+          <span>Threats</span>
+          {activeAlertCount > 0 && (
+            <span
+              style={{
+                position: "absolute",
+                top: 4,
+                right: "26%",
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
+                background: "var(--semantic-danger)",
+              }}
+            />
+          )}
+        </button>
+
+        <button
+          className={`dock-item ${page === "security-center" || page === "operations" ? "active" : ""}`}
+          onClick={() => setPage("security-center")}
+        >
+          <Shield size={18} />
+          <span>Security</span>
+        </button>
+
+        <button
+          className="dock-item"
+          onClick={() => setMobileMenuOpen(true)}
+        >
+          <Menu size={18} />
+          <span>Menu</span>
+        </button>
+      </nav>
 
       {/* AI Financial Security Analyst Widget */}
       <ChatBot phone={user} />

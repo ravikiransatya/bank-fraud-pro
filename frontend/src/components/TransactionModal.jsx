@@ -35,7 +35,7 @@ export default function TransactionModal({ transaction, onClose }) {
         alignItems: "center",
         justifyContent: "center",
         zIndex: 1000,
-        padding: 20,
+        padding: "16px 12px",
       }}
       onClick={onClose}
     >
@@ -44,9 +44,10 @@ export default function TransactionModal({ transaction, onClose }) {
         style={{
           width: "100%",
           maxWidth: 520,
+          maxHeight: "90vh",
+          overflowY: "auto",
           borderRadius: 14,
           boxShadow: "var(--shadow-modal)",
-          overflow: "hidden",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -128,9 +129,9 @@ export default function TransactionModal({ transaction, onClose }) {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
+              gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
               gap: 10,
-              padding: "14px 16px",
+              padding: "12px 14px",
               background: "#f8fafc",
               border: "1px solid var(--border-card)",
               borderRadius: "var(--radius-md)",
@@ -139,42 +140,42 @@ export default function TransactionModal({ transaction, onClose }) {
           >
             <div>
               <div style={{ fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", fontWeight: 700 }}>Payment Channel</div>
-              <div style={{ fontSize: 12.5, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>{transaction.type}</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>{transaction.type}</div>
             </div>
             <div>
               <div style={{ fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", fontWeight: 700 }}>Bank Account</div>
-              <div style={{ fontSize: 12.5, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>{transaction.bank || transaction.bankName}</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>{transaction.bank || transaction.bankName}</div>
             </div>
             <div>
               <div style={{ fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", fontWeight: 700 }}>Location / Routing</div>
-              <div style={{ fontSize: 12.5, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>{transaction.location || "Online"}</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>{transaction.location || "Online"}</div>
             </div>
             <div>
               <div style={{ fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", fontWeight: 700 }}>Timestamp</div>
-              <div style={{ fontSize: 12.5, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>{transaction.time}</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>{transaction.time}</div>
             </div>
             <div>
               <div style={{ fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", fontWeight: 700 }}>Category</div>
-              <div style={{ fontSize: 12.5, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>{transaction.merchantCategory || "General"}</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>{transaction.merchantCategory || "General"}</div>
             </div>
             <div>
               <div style={{ fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", fontWeight: 700 }}>Status</div>
-              <div style={{ fontSize: 12.5, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>{transaction.status?.toUpperCase()}</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>{transaction.status?.toUpperCase()}</div>
             </div>
           </div>
 
           {/* AI Risk Rationale */}
-          <div style={{ marginBottom: 20 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 6 }}>
+          <div style={{ marginBottom: 18 }}>
+            <div style={{ fontSize: 10.5, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 6 }}>
               ML Anomaly Rationale
             </div>
             <div
               style={{
-                padding: "10px 14px",
+                padding: "10px 12px",
                 background: "#ffffff",
                 border: "1px solid var(--border-card)",
                 borderRadius: "var(--radius-md)",
-                fontSize: 12.5,
+                fontSize: 12,
                 color: "var(--text-secondary)",
                 lineHeight: 1.5,
               }}
@@ -184,17 +185,17 @@ export default function TransactionModal({ transaction, onClose }) {
           </div>
 
           {/* Action Footer */}
-          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", borderTop: "1px solid var(--border-subtle)", paddingTop: 14 }}>
+          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", flexWrap: "wrap", borderTop: "1px solid var(--border-subtle)", paddingTop: 14 }}>
             {isHighRisk ? (
-              <button onClick={handleQuarantine} className="btn btn-danger" style={{ fontSize: 12 }}>
-                <Ban size={13} /> Quarantine & Freeze Merchant
+              <button onClick={handleQuarantine} className="btn btn-danger" style={{ fontSize: 12, flex: "1 1 auto" }}>
+                <Ban size={13} /> Quarantine & Freeze
               </button>
             ) : (
-              <button onClick={handleVerify} className="btn btn-secondary" style={{ fontSize: 12 }}>
-                <CheckCircle2 size={13} style={{ color: "var(--semantic-safe)" }} /> Mark as Verified
+              <button onClick={handleVerify} className="btn btn-secondary" style={{ fontSize: 12, flex: "1 1 auto" }}>
+                <CheckCircle2 size={13} style={{ color: "var(--semantic-safe)" }} /> Mark Verified
               </button>
             )}
-            <button onClick={onClose} className="btn btn-primary" style={{ fontSize: 12 }}>
+            <button onClick={onClose} className="btn btn-primary" style={{ fontSize: 12, flex: "1 1 auto" }}>
               Dismiss
             </button>
           </div>

@@ -94,9 +94,9 @@ export default function AccountSecurityCenter() {
       </div>
 
       {/* Top Grid: Score & Containment Controls */}
-      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 20, marginBottom: 24 }}>
+      <div className="responsive-grid-2" style={{ marginBottom: 18 }}>
         {/* Left: Account Security Score Card */}
-        <div className="bg-card" style={{ padding: "24px 26px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+        <div className="bg-card" style={{ padding: "18px 20px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
               <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: 0.6 }}>
